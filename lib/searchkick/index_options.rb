@@ -289,9 +289,14 @@ module Searchkick
         if options[:wordnet]
           settings[:analysis][:filter][:searchkick_wordnet] = {
             type: "synonym",
-            format: "wordnet",
-            synonyms_path: Searchkick.wordnet_path
+            format: "wordnet"
           }
+
+          if options[:wordnet].is_a?(Array)
+            settings[:analysis][:filter][:searchkick_wordnet][:synonyms] = options[:wordnet]
+          else
+            settings[:analysis][:filter][:searchkick_wordnet][:synonyms_path] = Searchkick.wordnet_path
+          end
 
           settings[:analysis][:analyzer][default_analyzer][:filter].insert(4, "searchkick_wordnet")
           settings[:analysis][:analyzer][default_analyzer][:filter] << "searchkick_wordnet"
